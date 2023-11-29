@@ -1,0 +1,45 @@
+version: "3.5"
+services:
+  queue_redis:
+      image: redis:4.0.14
+      container_name: ${APP_NAME}_redis
+      environment:
+        - TZ=Asia/Karachi
+      networks:
+        - queue
+      ports:
+       - "6379"
+  queue_php_fpm:
+        build: ../
+        container_name: ${APP_NAME}_php_fpm
+        working_dir: ${APP_PATH_CONTAINER}
+        environment:
+          - TZ=Asia/Karachi
+        networks:
+         - queue
+        depends_on:
+         - queue_redis
+        volumes:
+         - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+  queue_nginx:
+        image: nginx:1.15
+        container_name: ${APP_NAME}_nginx
+        environment:
+          - TZ=Asia/Karachi
+        working_dir: ${APP_PATH_CONTAINER}
+        networks:
+          - queue
+          - global_queue
+        depends_on:
+          - queue_php_fpm
+        ports:
+          - "8070:80"
+        volumes:
+          - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+          - ${APP_PATH_NGINX_CONF_HOST}:${APP_PATH_NGINX_CONF_CONTAINER}
+
+networks:
+  queue:
+    driver: bridge
+  global_queue:
+    name: share_net_app_queue

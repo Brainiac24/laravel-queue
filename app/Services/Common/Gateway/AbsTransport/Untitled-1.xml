@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root><root><head><session_id>6be59bc2-e6a2-416f-a508-d09d49de7646</session_id></head><request><protocol-version>1.5</protocol-version><request_type>EO_R_CARDS_ITEM_SEARCH</request_type><state>1</state><state_msg></state_msg><data><cards><card pan="123" exp_date="321"/></cards></data></request></root></root>
